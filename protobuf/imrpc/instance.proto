@@ -45,6 +45,21 @@ message SpdkInstanceSpec {
 	string backing_image_name = 8;
 	int32 ublk_queue_depth = 9;
 	int32 ublk_number_of_queue = 10;
+	// replica_transport_address_map is the transport-aware replacement for
+	// replica_address_map. Keyed by replica name, each value carries the
+	// replica's tcp_address and (optionally) rdma_address so the engine can
+	// pick whichever transport matches its own node transport at attach time.
+	// Legacy replica_address_map is retained for wire compatibility with older
+	// managers that don't populate this map.
+	map<string, ReplicaTransportAddresses> replica_transport_address_map = 11;
+}
+
+// ReplicaTransportAddresses carries both transport-qualified NVMe-oF addresses
+// for a single replica. tcp_address is always populated on dual-listener-aware
+// replicas; rdma_address is empty on TCP-only storage nodes.
+message ReplicaTransportAddresses {
+	string tcp_address = 1;
+	string rdma_address = 2;
 }
 
 message InstanceSpec {
@@ -94,6 +109,13 @@ message InstanceStatus {
 	string active_path = 15;
 	string preferred_path = 16;
 	repeated EngineFrontendNvmeTcpPath paths = 17;
+	// tcp_port is this replica's TCP NVMe-oF listener port. Equals port_start
+	// on TCP-only storage nodes, equals port_start+1 on RDMA-capable storage
+	// nodes. Zero on v1 data engine or pre-dual-listener replicas.
+	int32 tcp_port = 18;
+	// rdma_port is this replica's RDMA NVMe-oF listener port. Zero when the
+	// storage node has no RDMA capability or on v1 replicas.
+	int32 rdma_port = 19;
 }
 
 message InstanceCreateRequest {
