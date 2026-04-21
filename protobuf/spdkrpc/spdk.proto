@@ -53,6 +53,7 @@ service SPDKService {
     rpc EngineExpandPrecheck(EngineExpandPrecheckRequest) returns (EngineExpandPrecheckResponse);
     rpc EngineDeleteTarget(EngineDeleteTargetRequest) returns (google.protobuf.Empty);
     rpc EngineSetTargetListenerANAState(EngineSetTargetListenerANAStateRequest) returns (google.protobuf.Empty);
+    rpc EngineRemoveTargetListener(EngineRemoveTargetListenerRequest) returns (google.protobuf.Empty);
     rpc EngineSnapshotCreate(SnapshotRequest) returns (SnapshotResponse);
     rpc EngineSnapshotDelete(SnapshotRequest) returns (google.protobuf.Empty);
     rpc EngineSnapshotRevert(SnapshotRequest) returns (google.protobuf.Empty);
@@ -438,6 +439,11 @@ message EngineReplicaRebuildStatusResponse {
 message EngineSetTargetListenerANAStateRequest {
     string name = 1;
     string ana_state = 2;
+}
+
+message EngineRemoveTargetListenerRequest {
+    string name = 1;
+    string transport = 2;
 }
 
 message EngineFrontendNvmeTcpPath {
