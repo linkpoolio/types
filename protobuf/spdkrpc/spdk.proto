@@ -142,7 +142,17 @@ message Replica {
     string error_msg = 13;
     string backing_image_name = 14;
     string uuid = 15;
+    // tcp_port is the port of this replica's TCP NVMe-oF listener. Always
+    // populated on dual-listener-aware replicas: equals port_start on TCP-only
+    // storage nodes, equals port_start+1 on storage nodes that also expose
+    // RDMA. Zero when the sending replica is older than the dual-listener
+    // fields were added; callers must fall back to port_start in that case.
+    int32 tcp_port = 16;
+    // rdma_port is the port of this replica's RDMA NVMe-oF listener. Zero when
+    // the storage node has no RDMA capability (TCP-only deployment).
+    int32 rdma_port = 17;
 }
+
 
 message ReplicaCreateRequest {
     string name = 1;
@@ -358,6 +368,11 @@ message EngineCreateRequest {
     bool salvage_requested = 10;
     int32 ublk_queue_depth = 11;
     int32 ublk_number_of_queue = 12;
+    // replica_transport_address_map is the transport-aware replacement for
+    // replica_address_map. When populated, the engine picks whichever address
+    // matches its own node transport per replica. replica_address_map is kept
+    // for wire compat with older managers that do not populate this map.
+    map<string, ReplicaTransportAddresses> replica_transport_address_map = 13;
 }
 
 message EngineDeleteRequest {
@@ -405,6 +420,10 @@ message EngineReplicaAddRequest {
     bool fast_sync = 4;
     string engine_frontend_name = 5;
     string engine_frontend_address = 6;
+    // replica_transport_addresses is the transport-aware replacement for
+    // replica_address. When populated, the engine picks whichever address
+    // matches its own node transport.
+    ReplicaTransportAddresses replica_transport_addresses = 7;
 }
 
 message EngineReplicaListRequest {
@@ -854,4 +873,14 @@ message DiskHealthGetResponse {
 
     uint64 warning_temperature_time_minutes = 20;
     uint64 critical_composite_temperature_time_minutes = 21;
+}
+
+// ReplicaTransportAddresses carries both transport-qualified addresses for a
+// single replica, letting the engine pick whichever matches its own negotiated
+// transport at attach time. The fallback protocol is: prefer rdma_address when
+// the engine's node transport is RDMA and rdma_address is non-empty; otherwise
+// use tcp_address which is always populated on dual-listener-aware replicas.
+message ReplicaTransportAddresses {
+    string tcp_address = 1;
+    string rdma_address = 2;
 }
