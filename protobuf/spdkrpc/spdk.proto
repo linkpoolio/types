@@ -243,6 +243,14 @@ message ReplicaRebuildingDstStartRequest {
 
 message ReplicaRebuildingDstStartResponse {
     string dst_head_lvol_address = 1;
+    // dst_head_lvol_transport_addresses carries the transport-qualified
+    // addresses for the rebuilding lvol so the engine can pick a matching
+    // transport at attach time. TCP address points at the shared TCP fallback
+    // listener (PortStart+1) regardless of the rebuilding lvol's own port;
+    // RDMA address points at the rebuilding lvol's own port. Empty when the
+    // replica is older than this field was added; callers must fall back to
+    // dst_head_lvol_address.
+    ReplicaTransportAddresses dst_head_lvol_transport_addresses = 2;
 }
 
 message ReplicaRebuildingDstFinishRequest {
