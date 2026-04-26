@@ -209,8 +209,7 @@ message InstanceDeleteTargetRequest {
 }
 
 // InstanceSetQosLimitRequest applies new per-instance QoS limits at runtime.
-// Only valid for engine instances on the v2 data engine; the IM dispatches
-// to V2DataEngineInstanceOps which calls SPDKClient.EngineSetQosLimit.
+// Only valid for engine instances on the v2 data engine.
 message InstanceSetQosLimitRequest {
 	DataEngine data_engine = 1;
 	string name = 2;
