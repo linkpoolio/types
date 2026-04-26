@@ -54,6 +54,7 @@ service SPDKService {
     rpc EngineDeleteTarget(EngineDeleteTargetRequest) returns (google.protobuf.Empty);
     rpc EngineSetTargetListenerANAState(EngineSetTargetListenerANAStateRequest) returns (google.protobuf.Empty);
     rpc EngineRemoveTargetListener(EngineRemoveTargetListenerRequest) returns (google.protobuf.Empty);
+    rpc EngineSetQosLimit(EngineSetQosLimitRequest) returns (google.protobuf.Empty);
     rpc EngineSnapshotCreate(SnapshotRequest) returns (SnapshotResponse);
     rpc EngineSnapshotDelete(SnapshotRequest) returns (google.protobuf.Empty);
     rpc EngineSnapshotRevert(SnapshotRequest) returns (google.protobuf.Empty);
@@ -381,6 +382,25 @@ message EngineCreateRequest {
     // matches its own node transport per replica. replica_address_map is kept
     // for wire compat with older managers that do not populate this map.
     map<string, ReplicaTransportAddresses> replica_transport_address_map = 13;
+    // qos_limits caps aggregate raid bdev I/O via SPDK's bdev_set_qos_limit.
+    // All fields zero means no cap (default). Applied to the raid bdev so
+    // rebuild traffic — which goes engine→replica directly — is not subject.
+    QosLimits qos_limits = 14;
+}
+
+// QosLimits maps to SPDK's bdev_set_qos_limit parameters one-to-one. SPDK
+// enforces each limit as a separate token bucket; clients can mix-and-match
+// (e.g. cap aggregate IOPS but only writes for bandwidth).
+message QosLimits {
+    int64 rw_ios_per_sec = 1;
+    int64 rw_mb_per_sec = 2;
+    int64 r_mb_per_sec = 3;
+    int64 w_mb_per_sec = 4;
+}
+
+message EngineSetQosLimitRequest {
+    string name = 1;
+    QosLimits qos_limits = 2;
 }
 
 message EngineDeleteRequest {

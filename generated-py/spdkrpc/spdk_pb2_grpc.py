@@ -235,6 +235,16 @@ class SPDKServiceStub(object):
                 request_serializer=spdkrpc_dot_spdk__pb2.EngineSetTargetListenerANAStateRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
+        self.EngineRemoveTargetListener = channel.unary_unary(
+                '/spdkrpc.SPDKService/EngineRemoveTargetListener',
+                request_serializer=spdkrpc_dot_spdk__pb2.EngineRemoveTargetListenerRequest.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                )
+        self.EngineSetQosLimit = channel.unary_unary(
+                '/spdkrpc.SPDKService/EngineSetQosLimit',
+                request_serializer=spdkrpc_dot_spdk__pb2.EngineSetQosLimitRequest.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                )
         self.EngineSnapshotCreate = channel.unary_unary(
                 '/spdkrpc.SPDKService/EngineSnapshotCreate',
                 request_serializer=spdkrpc_dot_spdk__pb2.SnapshotRequest.SerializeToString,
@@ -749,6 +759,18 @@ class SPDKServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def EngineSetTargetListenerANAState(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def EngineRemoveTargetListener(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def EngineSetQosLimit(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -1277,6 +1299,16 @@ def add_SPDKServiceServicer_to_server(servicer, server):
             'EngineSetTargetListenerANAState': grpc.unary_unary_rpc_method_handler(
                     servicer.EngineSetTargetListenerANAState,
                     request_deserializer=spdkrpc_dot_spdk__pb2.EngineSetTargetListenerANAStateRequest.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'EngineRemoveTargetListener': grpc.unary_unary_rpc_method_handler(
+                    servicer.EngineRemoveTargetListener,
+                    request_deserializer=spdkrpc_dot_spdk__pb2.EngineRemoveTargetListenerRequest.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'EngineSetQosLimit': grpc.unary_unary_rpc_method_handler(
+                    servicer.EngineSetQosLimit,
+                    request_deserializer=spdkrpc_dot_spdk__pb2.EngineSetQosLimitRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'EngineSnapshotCreate': grpc.unary_unary_rpc_method_handler(
@@ -2283,6 +2315,40 @@ class SPDKService(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/spdkrpc.SPDKService/EngineSetTargetListenerANAState',
             spdkrpc_dot_spdk__pb2.EngineSetTargetListenerANAStateRequest.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def EngineRemoveTargetListener(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/spdkrpc.SPDKService/EngineRemoveTargetListener',
+            spdkrpc_dot_spdk__pb2.EngineRemoveTargetListenerRequest.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def EngineSetQosLimit(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/spdkrpc.SPDKService/EngineSetQosLimit',
+            spdkrpc_dot_spdk__pb2.EngineSetQosLimitRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
