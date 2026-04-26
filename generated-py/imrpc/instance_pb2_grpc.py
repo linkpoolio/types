@@ -71,6 +71,11 @@ class InstanceServiceStub(object):
                 request_serializer=imrpc_dot_instance__pb2.InstanceDeleteTargetRequest.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
+        self.InstanceSetQosLimit = channel.unary_unary(
+                '/imrpc.InstanceService/InstanceSetQosLimit',
+                request_serializer=imrpc_dot_instance__pb2.InstanceSetQosLimitRequest.SerializeToString,
+                response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+                )
         self.LogSetLevel = channel.unary_unary(
                 '/imrpc.InstanceService/LogSetLevel',
                 request_serializer=imrpc_dot_instance__pb2.LogSetLevelRequest.SerializeToString,
@@ -167,6 +172,12 @@ class InstanceServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def InstanceSetQosLimit(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def LogSetLevel(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -253,6 +264,11 @@ def add_InstanceServiceServicer_to_server(servicer, server):
             'InstanceDeleteTarget': grpc.unary_unary_rpc_method_handler(
                     servicer.InstanceDeleteTarget,
                     request_deserializer=imrpc_dot_instance__pb2.InstanceDeleteTargetRequest.FromString,
+                    response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'InstanceSetQosLimit': grpc.unary_unary_rpc_method_handler(
+                    servicer.InstanceSetQosLimit,
+                    request_deserializer=imrpc_dot_instance__pb2.InstanceSetQosLimitRequest.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ),
             'LogSetLevel': grpc.unary_unary_rpc_method_handler(
@@ -473,6 +489,23 @@ class InstanceService(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/imrpc.InstanceService/InstanceDeleteTarget',
             imrpc_dot_instance__pb2.InstanceDeleteTargetRequest.SerializeToString,
+            google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def InstanceSetQosLimit(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/imrpc.InstanceService/InstanceSetQosLimit',
+            imrpc_dot_instance__pb2.InstanceSetQosLimitRequest.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

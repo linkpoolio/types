@@ -20,6 +20,7 @@ service InstanceService {
 	rpc InstanceResume(InstanceResumeRequest) returns (google.protobuf.Empty) {}
 	rpc InstanceSwitchOverTarget(InstanceSwitchOverTargetRequest) returns (google.protobuf.Empty) {}
 	rpc InstanceDeleteTarget(InstanceDeleteTargetRequest) returns (google.protobuf.Empty) {}
+	rpc InstanceSetQosLimit(InstanceSetQosLimitRequest) returns (google.protobuf.Empty) {}
 
 	rpc LogSetLevel(LogSetLevelRequest) returns (google.protobuf.Empty);
 	rpc LogSetFlags(LogSetFlagsRequest) returns (google.protobuf.Empty);
@@ -205,6 +206,16 @@ message InstanceDeleteTargetRequest {
 	DataEngine data_engine = 1;
 	string name = 2;
 	string type = 3;
+}
+
+// InstanceSetQosLimitRequest applies new per-instance QoS limits at runtime.
+// Only valid for engine instances on the v2 data engine; the IM dispatches
+// to V2DataEngineInstanceOps which calls SPDKClient.EngineSetQosLimit.
+message InstanceSetQosLimitRequest {
+	DataEngine data_engine = 1;
+	string name = 2;
+	string type = 3;
+	QosLimits qos_limits = 4;
 }
 
 message LogSetLevelRequest {
