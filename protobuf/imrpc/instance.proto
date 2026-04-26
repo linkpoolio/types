@@ -52,6 +52,19 @@ message SpdkInstanceSpec {
 	// Legacy replica_address_map is retained for wire compatibility with older
 	// managers that don't populate this map.
 	map<string, ReplicaTransportAddresses> replica_transport_address_map = 11;
+	// qos_limits caps aggregate raid bdev I/O for engine instances. Mapped
+	// by the IM into spdkrpc.EngineCreateRequest.qos_limits which is then
+	// applied via SPDK's bdev_set_qos_limit on the raid bdev. All-zero
+	// fields means unlimited.
+	QosLimits qos_limits = 12;
+}
+
+// QosLimits maps to SPDK's bdev_set_qos_limit parameters one-to-one.
+message QosLimits {
+	int64 rw_ios_per_sec = 1;
+	int64 rw_mb_per_sec = 2;
+	int64 r_mb_per_sec = 3;
+	int64 w_mb_per_sec = 4;
 }
 
 // ReplicaTransportAddresses carries both transport-qualified NVMe-oF addresses
